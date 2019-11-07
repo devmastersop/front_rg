@@ -2,25 +2,55 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import Buscador from './components/Buscador';
+import Titulo from './components/Titulo';
+import Docente from './components/Docente'
+
+
+
+class App extends React.Component {
+
+  state = {
+    termino: '',
+    docente: []
+  }
+
+  consularApi = () => {
+
+    const termino = this.state.termino;
+    const url = 'http://localhost:3050/regpayroll/v1/teachers/' + termino;
+
+    fetch(url)
+      .then(respuesta => respuesta.json())
+      .then((data) => {
+        this.setState({ docente: data, busqueda: '' })
+      }).catch(console.log)
+  }
+
+  datosBusqueda = (termino) => {
+    console.log(termino);
+
+    this.setState({
+      termino
+    }, () => {
+      this.consularApi();
+    })
+  }
+
+  render() {
+    return (
+      <div>
+        <Titulo />
+        <Buscador
+          datosBusqueda={this.datosBusqueda}
+        />
+
+        <Docente
+          docente={this.state.docente}
+        />
+      </div>
+    );
+  }
 }
 
 export default App;
