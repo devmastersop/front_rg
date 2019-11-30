@@ -1,0 +1,43 @@
+
+#titulo{
+  
+   color:white;
+   text-align: center;
+   vertical-align:text-bottom;
+   
+   
+  
+}
+header{
+    margin:0;
+    height: 100px;
+    background-color: black;
+    vertical-align: middle;
+}
+.buscador{
+    margin: 10px;
+    padding: 10px;
+}
+.col-md-8.tabla th{
+    text-align: justify;
+   
+}
+label{
+   
+    
+    padding: 5px;
+    margin:10px;
+    font-weight: bold;
+}
+select{
+    padding: 5px;
+    margin-left: 23px;
+
+}
+button{
+    padding: 5px;
+    margin:10px;
+}
+.modal input{
+    border:none;
+}

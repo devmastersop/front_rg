@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import './estilos.css'
 
 class Buscador extends Component {
 
@@ -14,10 +15,11 @@ class Buscador extends Component {
 
     render() {
         return (
-            <form onSubmit={this.obtenerDatos}>
+            <form className="buscador " onSubmit={this.obtenerDatos}>
                 <div>
-                    <input id="ingresarDatos" ref={this.busquedaRef}  placeholder="DNI" type="text" name="cuadro" />
-                    <button id='botonBuscar' >Buscar</button>
+                    <label  className="cod-md-1" for="info">{this.props.inputtipo}    :</label>
+                    <input className="col-md-2  " id="ingresarDatos" ref={this.busquedaRef}  placeholder={this.props.inputtipo} type="text"  id="info" name="info" />
+                    <button className="col-md-1 ml-5 btn btn-primary"  id='botonBuscar' >Buscar</button>
                 </div>
             </form>
         );
