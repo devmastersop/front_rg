@@ -31,15 +31,15 @@ function Example(props) {
                     <thead>
                         <tr>
                         <th>Horas</th>
-                        <th>Cantidad de Alumnos</th>
-                        <th>Pago por horas</th>
+                        <th>Pago por Horas</th>
+                        <th>Importe</th>
                         </tr>
                         
                     </thead>
                     <tbody>
                         <tr>
-                        <td><input type="text" className="campo1"/></td>
-                        <td><input type="text" className="campo1"/></td>
+                        <td><input type="number" className="campo1"/></td>
+                        <td><input type="number" step="0.01" className="campo1"/></td>
                         <td><input type="text" className="campo1"/></td>
                         </tr>
                         
