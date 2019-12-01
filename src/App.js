@@ -14,10 +14,11 @@ class App extends React.Component {
 
   state = {
     termino: '',
-    termino2:'',
+    a:'',
+    b:'',
     docente: []
   }
-
+ 
   consularApi = () => {
 
     const termino = this.state.termino;
@@ -40,7 +41,7 @@ class App extends React.Component {
         this.setState({ docente: data, busqueda: '' })
       }).catch(console.log)
   }
-
+  
   datosBusqueda = (termino) => {
     console.log(termino);
 
@@ -73,7 +74,7 @@ class App extends React.Component {
           inputtipo="APE. PATERNO"
           datosBusqueda={this.datosBusqueda2}
         />
-        <BuscadorPeriodo />
+        <BuscadorPeriodo funcion={this.consultarperiodo} seleccion={this.periodo} seleccion2={this.periodo2} />
         
         <Docente
           docente={this.state.docente}

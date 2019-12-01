@@ -20,14 +20,23 @@ class BuscadorPeriodo extends React.Component{
           
            const termino= e.target.value;
            console.log(termino);
+           this.props.periodo(termino);
          
       }
+      handleOnChange2(e) {
+    
+          
+        const termino= e.target.value;
+        console.log(termino);
+        this.props.periodo2(termino);
+      
+   }
  
      
 
 render(){
     return(
-        <form className="buscador " onSubmit={this.obtenerDatos}>
+        <form className="buscador " onSubmit={this.props.consultarperiodo}>
         <div>
             <label> Prd. Acádemico </label>
             <select onChange={this.handleOnChange}>
@@ -41,7 +50,7 @@ render(){
                 <option  value="2019-1">2019-1</option>
             </select>
             <label> a </label>
-            <select onChange={this.handleOnChange}>
+            <select onChange={this.handleOnChange2}>
                 <option  value="">...</option>
                 <option  value="2016-1">2016-1</option>
                 <option  value="2016-2">2016-2</option>
