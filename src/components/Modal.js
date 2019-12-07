@@ -4,20 +4,38 @@ import './estilos.css';
 
 
 import  {Bootstrap, Modal, ButtonToolbar,Button, Grid, Row, Col} from 'react-bootstrap';
-function Example(props) {
-    const [smShow, setSmShow] = useState(false);
-    const [lgShow, setLgShow] = useState(false);
+import { tsPropertySignature } from '@babel/types';
+
+
+
+function Example(props){
+
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const ref1=React.createRef();
+  const ref2=React.createRef();
+  function obtener(e){
+    const termino=ref1.current.value;
+    const termino2=ref2.current.value;
+    props.datosBusquedaid(termino,termino2);
+  }
+ 
+ 
+
+
   
     return (
         <ButtonToolbar>
          
-          <Button variant="outline-primary" onClick={() => setLgShow(true)}> Registrar </Button>
+          <Button variant="outline-primary" onClick={handleShow}> Registrar </Button>
     
     
-          <Modal {...props}
+          <Modal 
             size="lg"
-            show={lgShow}
-            onHide={() => setLgShow(false)}
+            show={show}
+            onHide={handleClose}
             aria-labelledby="contained-modal-title-vcenter"
             className="modal"
           >
@@ -32,15 +50,15 @@ function Example(props) {
                         <tr>
                         <th>Horas</th>
                         <th>Pago por Horas</th>
-                        <th>Importe</th>
+                        
                         </tr>
                         
                     </thead>
                     <tbody>
                         <tr>
-                        <td><input type="number" className="campo1"/></td>
-                        <td><input type="number" step="0.01" className="campo1"/></td>
-                        <td><input type="text" className="campo1"/></td>
+                        <td><input ref={ref1}type="number" className="campo1"/></td>
+                        <td><input ref={ref2}type="number" step="0.01" className="campo1"/></td>
+                      
                         </tr>
                         
                     </tbody>
@@ -50,7 +68,12 @@ function Example(props) {
                 </table>
             </Modal.Body>
             <Modal.Footer>
-                    <Button onClick={props.onHide}>Enviar</Button>
+                <Button variant="secondary" onClick={handleClose}>
+                  Cerrar
+                </Button>
+                <Button variant="primary" onClick={obtener}>
+                  Guardar
+                </Button>
             </Modal.Footer>
           </Modal>
         </ButtonToolbar>);

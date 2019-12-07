@@ -6,6 +6,7 @@ import Buscador from './components/Buscador';
 import Titulo from './components/Titulo';
 import Docente from './components/Docente'
 import BuscadorPeriodo from './components/BuscadorPeriodo';
+import DocenteActualizado from './components/DocenteActualizado';
 
 
 
@@ -16,7 +17,32 @@ class App extends React.Component {
     termino: '',
     a:'',
     b:'',
-    docente: []
+    docente: [],
+    id:''
+  }
+  obtenerpdf=()=>{
+    const termino = this.state.termino;
+    const url = `http://localhost:3050/regpayroll/v1/teachers/${this.state.termino}/pdf`  ;
+
+    fetch(url)
+      .then(respuesta => respuesta.json())
+      .then((data) => {
+        this.setState({ docente: data 
+        })
+      }).catch(console.log)
+
+  }
+  consulta=()=>{
+    const termino = this.state.termino;
+    const url = `http://localhost:3050/regpayroll/v1/teachers/${this.state.termino}`  ;
+
+    fetch(url)
+      .then(respuesta => respuesta.json())
+      .then((data) => {
+        this.setState({ docente: data 
+        })
+      }).catch(console.log)
+
   }
  
   consularApi = () => {
@@ -27,8 +53,13 @@ class App extends React.Component {
     fetch(url)
       .then(respuesta => respuesta.json())
       .then((data) => {
-        this.setState({ docente: data, busqueda: '' })
+        this.setState({ docente: data },()=>{
+          this.actualizarid();
+        })
       }).catch(console.log)
+
+    
+    
   }
   consultarApi = () => {
 
@@ -38,8 +69,15 @@ class App extends React.Component {
     fetch(url)
       .then(respuesta => respuesta.json())
       .then((data) => {
-        this.setState({ docente: data, busqueda: '' })
-      }).catch(console.log)
+        this.setState({ docente: data},()=>{
+          this.actualizarid();
+      })
+    }).catch(console.log)
+  }
+  actualizarid=()=>{
+        this.state.docente.map((docente) => (
+        this.setState({id:docente.persona_id})
+      ))
   }
   
   datosBusqueda = (termino) => {
@@ -60,6 +98,34 @@ class App extends React.Component {
       this.consultarApi();
     })
   }
+  putDato=()=>{
+    //const termino = this.state.id;
+    const url = `http://localhost:3050/regpayroll/v1/teachers/${this.state.id}`  ;
+    fetch(url, {
+    method: 'PUT',
+    body: JSON.stringify({
+      t_horas:this.state.a,
+      t_unidad:this.state.b
+      }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8"
+    }
+    })
+    .then(response => response.json())
+    .then(json => console.log(json))
+}
+
+  datosBusquedaid=(a,b)=>{
+   console.log(a,b);
+  
+      this.setState({
+        a,
+        b
+      },()=>{
+        this.putDato();
+      })
+    
+  }
   
 
   render() {
@@ -77,11 +143,21 @@ class App extends React.Component {
         <BuscadorPeriodo funcion={this.consultarperiodo} seleccion={this.periodo} seleccion2={this.periodo2} />
         
         <Docente
+          
+          consulta={this.consulta}
+          busquedaId={this.datosBusquedaid}
           docente={this.state.docente}
+          a={this.state.a}
+          b={this.state.b}
+          obtenerpdf={this.obtenerpdf}
         />
+      
+        
+        
       </div>
     );
   }
 }
 
 export default App;
+//<DocenteActualizado docente={this.state.docente}/>

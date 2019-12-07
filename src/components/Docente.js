@@ -1,9 +1,14 @@
 import React from 'react'
 import './estilos.css';
 import Modal from './Modal';
-import { Button } from 'react-bootstrap';
+import DocenteVer from './DocenteVer'
 
-const Docente = ({ docente }) => {
+import { Button } from 'react-bootstrap';
+import Visualizar from './Modal2'
+import VerPdf from './VerPdf';
+
+
+function Docente(props) {
   return (
     <div>
       <table border="1px" className="col-md-12 tabla">
@@ -11,22 +16,25 @@ const Docente = ({ docente }) => {
           <tr>
             <th>PROGRAMA</th>
             <th>CURSO</th>
-            <th>NOMBRE</th>
-            <th>APELLIDOS</th>
-            <th>Total de Horas</th>
+            <th>NOMBRES</th>
+          
+           
             <th>Registrar</th>
           </tr>
         </thead>
 
         <tbody>
-          {docente.map((docente) => (
-            <tr>
+          {props.docente.map((docente) => (
+            
+            <tr key={docente.persona_id}>
+              
               <td>{docente.nom_programa}</td>
               <td>{docente.nom_curso}</td>
-              <td>{docente.persona_nombres}</td>
-              <td>{docente.persona_apaterno} {docente.persona_amaterno}</td>
-              <td>{docente.t_horas}</td>
-              <td><Modal /><Button variant="outline-danger">VER PDF </Button></td>
+              <td>{docente.persona_nombres} {docente.persona_apaterno} {docente.persona_amaterno}</td>
+              
+            
+             
+              <td><Modal datosBusquedaid={props.busquedaId}/><Visualizar consulta={props.consulta} docente={props.docente} /><VerPdf obtenerpdf={props.obtenerpdf} /></td>
             </tr>
           ))}
         </tbody>
