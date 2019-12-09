@@ -6,7 +6,7 @@ import Buscador from './components/Buscador';
 import Titulo from './components/Titulo';
 import Docente from './components/Docente'
 import BuscadorPeriodo from './components/BuscadorPeriodo';
-import DocenteActualizado from './components/DocenteActualizado';
+import Anadir from './components/Modal3';
 
 
 
@@ -18,23 +18,52 @@ class App extends React.Component {
     a:'',
     b:'',
     docente: [],
-    id:''
+    id:'',
+    curso:null,
+    ciclo:null,
+    hora:null,
+    phora:null
+
   }
-  obtenerpdf=()=>{
-    const termino = this.state.termino;
+  /*obtenerpdf=()=>{
+    //const termino = this.state.termino;
     const url = `http://localhost:3050/regpayroll/v1/teachers/${this.state.termino}/pdf`  ;
 
-    fetch(url)
-      .then(respuesta => respuesta.json())
-      .then((data) => {
+    fetch(url,{ headers : { 
+      "Content-Type": "application/json; charset=utf-8",
+      "Accept": "application/json"
+     }})
+      .then(respuesta => respuesta.download())
+      .then(text=> console.log(text)).catch(console.error)
+      /*.then((data) => {
         this.setState({ docente: data 
         })
       }).catch(console.log)
 
+  }*/
+  anadirpago=(e)=>{
+    
+    const url = process.env.REACT_APP_API+`regpayroll/v2/teachers/${this.state.id}/tramites`  ;
+    fetch(url, {
+    method: 'POST',
+    body: JSON.stringify({
+      id_curso: this.state.curso,
+      id_ciclo:this.state.ciclo,
+      t_horas: this.state.hora,
+      t_unidad: this.state.phora,
+      
+    }),
+    headers: {
+      "Content-type": "application/json; charset=UTF-8"
+    }
+  })
+  .then(response => response.json())
+  .then(json => console.log(json))
   }
-  consulta=()=>{
+  consulta=(e)=>{
+    e.preventDefault();
     const termino = this.state.termino;
-    const url = `http://localhost:3050/regpayroll/v1/teachers/${this.state.termino}`  ;
+    const url = process.env.REACT_APP_API+`regpayroll/v1/teachers/${this.state.termino}`  ;
 
     fetch(url)
       .then(respuesta => respuesta.json())
@@ -48,8 +77,8 @@ class App extends React.Component {
   consularApi = () => {
 
     const termino = this.state.termino;
-    const url = `http://localhost:3050/regpayroll/v1/teachers/${this.state.termino}`  ;
-
+    const url = process.env.REACT_APP_API+`regpayroll/v2/teachers/${this.state.termino}/tramites`  ;
+    //const url=`https://registro-planilla-teamx.herokuapp.com/regpayroll/v2/teachers/${this.state.termino}/tramites`  ;
     fetch(url)
       .then(respuesta => respuesta.json())
       .then((data) => {
@@ -59,27 +88,13 @@ class App extends React.Component {
       }).catch(console.log)
 
     
-    
-  }
-  consultarApi = () => {
 
-    const termino = this.state.termino;
-    const url = `http://localhost:3050/regpayroll/v1/teachers?name=${this.state.termino}`  ;
-
-    fetch(url)
-      .then(respuesta => respuesta.json())
-      .then((data) => {
-        this.setState({ docente: data},()=>{
-          this.actualizarid();
-      })
-    }).catch(console.log)
   }
   actualizarid=()=>{
-        this.state.docente.map((docente) => (
-        this.setState({id:docente.persona_id})
-      ))
-  }
-  
+    this.state.docente.map((docente) => (
+    this.setState({id:docente.persona_id})
+  ))
+}
   datosBusqueda = (termino) => {
     console.log(termino);
 
@@ -89,6 +104,45 @@ class App extends React.Component {
       this.consularApi();
     })
   }
+  guardarcurso = (termino) => {
+    console.log(termino);
+
+    this.setState({
+      curso:termino
+    })
+  }
+  guardarciclo = (termino) => {
+    console.log(termino);
+
+    this.setState({
+      ciclo:termino
+    })
+  }
+  guardarhoraypago=(termino,termino2)=>{
+    this.setState({
+      hora:termino,
+      phora:termino2
+
+    },()=>{
+      this.anadirpago();
+    })
+  }
+  consultarApi = () => {
+
+    const termino = this.state.termino;
+    const url = process.env.REACT_APP_API+`regpayroll/v1/teachers?name=${this.state.termino}`  ;
+
+    fetch(url)
+      .then(respuesta => respuesta.json())
+      .then((data) => {
+        this.setState({ docente: data},()=>{
+          this.actualizarid();
+      })
+    }).catch(console.log)
+  }
+ 
+  
+ 
   datosBusqueda2 = (termino) => {
     console.log(termino);
 
@@ -100,7 +154,7 @@ class App extends React.Component {
   }
   putDato=()=>{
     //const termino = this.state.id;
-    const url = `http://localhost:3050/regpayroll/v1/teachers/${this.state.id}`  ;
+    const url = process.env.REACT_APP_API+`regpayroll/v1/teachers/${this.state.id}`  ;
     fetch(url, {
     method: 'PUT',
     body: JSON.stringify({
@@ -112,7 +166,9 @@ class App extends React.Component {
     }
     })
     .then(response => response.json())
-    .then(json => console.log(json))
+    .then(json => console.log(json),()=>{
+      this.consularApi();
+    })
 }
 
   datosBusquedaid=(a,b)=>{
@@ -127,7 +183,7 @@ class App extends React.Component {
     
   }
   
-
+  /*<BuscadorPeriodo funcion={this.consultarperiodo} seleccion={this.periodo} seleccion2={this.periodo2} />*/ 
   render() {
     return (
       <div>
@@ -140,7 +196,13 @@ class App extends React.Component {
           inputtipo="APE. PATERNO"
           datosBusqueda={this.datosBusqueda2}
         />
-        <BuscadorPeriodo funcion={this.consultarperiodo} seleccion={this.periodo} seleccion2={this.periodo2} />
+        
+        <Anadir consulta={this.consulta}
+                guardarcurso={this.guardarcurso}
+                guardarciclo={this.guardarciclo}
+                guardarhoraypago={this.guardarhoraypago}
+                consularApi={this.consularApi}
+        />
         
         <Docente
           

@@ -3,8 +3,8 @@ import React, {Component,useState} from 'react';
 import './estilos.css';
 
 
-import  {Bootstrap, Modal, ButtonToolbar,Button, Grid, Row, Col} from 'react-bootstrap';
-import { tsPropertySignature } from '@babel/types';
+import  {Button} from 'react-bootstrap';
+
 
 
 
@@ -12,9 +12,9 @@ function VerPdf(props){
 
   
  
-  function obtener(e){
+  function obtener(){
     
-    props.obtenerpdf();
+    props.descargar();
   }
  
  

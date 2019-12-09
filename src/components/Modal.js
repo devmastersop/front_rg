@@ -29,18 +29,19 @@ function Example(props){
     return (
         <ButtonToolbar>
          
-          <Button variant="outline-primary" onClick={handleShow}> Registrar </Button>
+          <Button variant="outline-primary" onClick={handleShow}> Editar </Button>
     
     
           <Modal 
             size="lg"
             show={show}
+            dialogClassName="modal-90w"
             onHide={handleClose}
-            aria-labelledby="contained-modal-title-vcenter"
+            aria-labelledby="example-custom-modal-styling-title"
             className="modal"
           >
             <Modal.Header closeButton>
-              <Modal.Title id="contained-modal-title-vcenter">
+              <Modal.Title id="example-custom-modal-styling-title">
                     Registro de los Datos 
               </Modal.Title>
             </Modal.Header>
