@@ -14,6 +14,7 @@ function Anadir(props){
     const handleShow = () => setShow(true);
     const ref1=React.createRef();
     const ref2=React.createRef();
+   
 
     function obtener(e){
       const termino=ref1.current.value;
@@ -53,16 +54,25 @@ function Anadir(props){
                   <table className="col-md-12" border="1px">
                       <thead>
                           <tr>
+                          <th>Ciclo</th>
                           <th>Curso</th>
                           <th> Horas</th>
                           <th>Pago x H.</th>
-                          <th>Ciclo</th>
+                          
                           
                           </tr>
                           
                       </thead>
                       <tbody>
                           <tr>
+                          <td>
+                            <select onChange={obtener2}>
+                              <option value="1">2018-I</option>
+                              <option value="2">2018-II</option>
+                              <option value="4">2017-II</option>
+                              <option value="7">2016-II</option>
+                            </select>
+                          </td>
                           <td>
                             <select onChange={obtener1}>
                               <option value="73035">Gestión de Proyectos de TI</option>
@@ -73,17 +83,10 @@ function Anadir(props){
                             </select>
                           </td>
                           
-                          <td><input ref={ref1}type="number" className="campo1"/></td>
-                          <td><input ref={ref2}type="number" step="0.01" className="campo1"/></td>
-                          <td>
-                            <select onChange={obtener2}>
-                              <option value="1">2018-I</option>
-                              <option value="2">2018-II</option>
-                              <option value="4">2017-II</option>
-                              <option value="7">2016-II</option>
-                            </select>
-                          </td>
-                        
+                          <td><input  ref={ref1}type="number" className="campo1"/></td>
+                          <td><input  ref={ref2}type="number" step="0.01" className="campo1"/></td>
+                          
+                         
                           </tr>
                           
                       </tbody>

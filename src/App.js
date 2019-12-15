@@ -7,6 +7,8 @@ import Titulo from './components/Titulo';
 import Docente from './components/Docente'
 import BuscadorPeriodo from './components/BuscadorPeriodo';
 import Anadir from './components/Modal3';
+import swal from 'sweetalert'
+
 
 
 
@@ -57,8 +59,23 @@ class App extends React.Component {
       "Content-type": "application/json; charset=UTF-8"
     }
   })
-  .then(response => response.json())
-  .then(json => console.log(json))
+  .then((resp)=>{
+    console.log(resp);
+    if(resp){
+      swal("guardado exitoso...!","","success")
+      console.log("funciona beneficio");
+
+
+    }else{
+      swal("Oops, el beneficio no fue editado", "","error");
+    }
+  }).catch(error => {
+
+    swal("Oops, Algo salió mal!!", "","error")
+    console.error(error)
+    })
+  /*.then(response => response.json())
+  .then(json => console.log(json))*/
   }
   consulta=(e)=>{
     e.preventDefault();
@@ -73,21 +90,33 @@ class App extends React.Component {
       }).catch(console.log)
 
   }
- 
+   //const termino = this.state.termino;
   consularApi = () => {
-
-    const termino = this.state.termino;
-    const url = process.env.REACT_APP_API+`regpayroll/v2/teachers/${this.state.termino}/tramites`  ;
-    //const url=`https://registro-planilla-teamx.herokuapp.com/regpayroll/v2/teachers/${this.state.termino}/tramites`  ;
-    fetch(url)
-      .then(respuesta => respuesta.json())
-      .then((data) => {
-        this.setState({ docente: data },()=>{
-          this.actualizarid();
-        })
-      }).catch(console.log)
-
+    console.log(this.state.docente.length);
     
+      const url = process.env.REACT_APP_API+`regpayroll/v2/teachers/${this.state.termino}/tramites`  ;
+      //const url=`https://registro-planilla-teamx.herokuapp.com/regpayroll/v2/teachers/${this.state.termino}/tramites`  ;
+      fetch(url)
+        .then(respuesta => respuesta.json())
+        .then((data) => {
+          if(data.length>0){
+            swal("Existen Registros de este Profesor","","success").then(
+              this.setState({ docente: data },()=>{
+                this.actualizarid();
+               }))
+          }else{
+            swal("No hay Registro de este profesor.\n"+" Presione NUEVO PROFESOR\n","","info").then(
+              this.setState({
+               
+                docente: [],
+                id:'',
+                
+              })
+            )
+
+          }
+         
+        }).catch(console.log)  
 
   }
   actualizarid=()=>{
@@ -102,6 +131,40 @@ class App extends React.Component {
       termino
     }, () => {
       this.consularApi();
+    })
+  }
+  queryid=()=>{
+    if(this.state.docentr&& this.state.docente.length){
+      this.setState({
+        docente:[]
+      });
+      const url = process.env.REACT_APP_API+`regpayroll/v2/teachers/${this.state.termino}`  ;
+      //const url=`https://registro-planilla-teamx.herokuapp.com/regpayroll/v2/teachers/${this.state.termino}/tramites`  ;
+      fetch(url)
+        .then(respuesta => respuesta.json())
+        .then((data) => {
+          this.setState({ docente: data },()=>{
+            this.actualizarid();
+          })
+        }).catch(console.log)
+    }else{
+      const url = process.env.REACT_APP_API+`regpayroll/v2/teachers/${this.state.termino}`  ;
+      //const url=`https://registro-planilla-teamx.herokuapp.com/regpayroll/v2/teachers/${this.state.termino}/tramites`  ;
+      fetch(url)
+        .then(respuesta => respuesta.json())
+        .then((data) => {
+          this.setState({ docente: data },()=>{
+            this.actualizarid();
+          })
+        }).catch(console.log)
+
+  }}
+  dataBusqueda=(termino)=>{
+    console.log(termino);
+    this.setState({
+      termino
+    },()=>{
+      this.queryid();
     })
   }
   guardarcurso = (termino) => {
@@ -130,7 +193,7 @@ class App extends React.Component {
   consultarApi = () => {
 
     const termino = this.state.termino;
-    const url = process.env.REACT_APP_API+`regpayroll/v1/teachers?name=${this.state.termino}`  ;
+    const url = process.env.REACT_APP_API+`regpayroll/v2/teachers?name=${this.state.termino}`  ;
 
     fetch(url)
       .then(respuesta => respuesta.json())
@@ -191,11 +254,9 @@ class App extends React.Component {
         <Buscador
           inputtipo="NÚMERO DNI"
           datosBusqueda={this.datosBusqueda}
+          dataBusqueda={this.dataBusqueda}
         />
-        <Buscador
-          inputtipo="APE. PATERNO"
-          datosBusqueda={this.datosBusqueda2}
-        />
+       
         
         <Anadir consulta={this.consulta}
                 guardarcurso={this.guardarcurso}
@@ -223,3 +284,7 @@ class App extends React.Component {
 
 export default App;
 //<DocenteActualizado docente={this.state.docente}/>
+/*<Buscador
+inputtipo="APE. PATERNO"
+datosBusqueda={this.datosBusqueda2}
+/>*/
